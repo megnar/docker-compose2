@@ -1,0 +1,38 @@
+version: '3'
+services:
+  
+  mysql:
+    build: ./mysql/
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'db'
+    ports:
+      - '3306:3306'
+   
+
+  
+  server:
+    
+    build: ./python/
+
+    command:  sh -c "sleep 7s ; python3 ./myFile.py"
+
+    ports:
+      - 1234:1234
+
+    depends_on:
+      - mysql
+    
+
+  client:
+    build: ./python_client/
+
+    command: sh -c "sleep 7s ; python3 ./client.py"
+
+    network_mode: host
+
+    depends_on:
+      - server
+    
+

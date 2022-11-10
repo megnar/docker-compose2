@@ -1,0 +1,75 @@
+import http.server
+import socketserver
+import mysql.connector
+
+connection = mysql.connector.connect(
+    user='root',password='root', host='mysql', port="3306", database='db')
+
+
+cursor = connection.cursor()
+cursor.execute('Select * FROM users')
+users = cursor.fetchall()
+connection.close()
+#f = open('index.html', 'w')
+#f.write(users)
+
+handler = http.server.SimpleHTTPRequestHandler
+
+with socketserver.TCPServer(("", 1234), handler) as httpd:
+    httpd.serve_forever()
+print("create server")
+
+
+
+
+
+
+import mysql.connector
+
+import urllib.request
+
+fp = urllib.request.urlopen("http://localhost:1234/")
+encodedContent = fp.read()
+decodedContent = encodedContent.decode("utf8")
+
+print(decodedContent)
+print("We get sms!")
+fp.close()
+
+
+
+
+
+
+version: '3'
+services:
+  puthonapp:
+    build: ./python/
+    command: sh -c "sleep 10s ; python3 ./myFile.py"
+    network_mode : host
+    depends_on:
+      - server
+
+
+  mysql:
+    build: ./mysql/
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'db'
+    ports:
+      - '3306:3306'
+   
+
+  
+  server:
+    
+    build: python_server/
+
+    command: python3 server.py
+
+    ports:
+      - 1234:1234
+    depends_on:
+      - mysql
+    
