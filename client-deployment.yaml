@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.27.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: client
+  name: client
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      io.kompose.service: client
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.27.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: client
+    spec:
+      containers:
+        - args:
+            - sh
+            - -c
+            - sleep 7s ; python3 ./client.py
+          image: docker-compose2-client:latest
+          name: client
+          resources: {}
+      restartPolicy: Always
+status: {}

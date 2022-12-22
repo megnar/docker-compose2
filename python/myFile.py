@@ -25,7 +25,8 @@ handler = http.server.SimpleHTTPRequestHandler
 with socketserver.TCPServer(("", 1234), handler) as httpd:
     httpd.serve_forever()
 print("end")
-
+while(1):
+    pass
 
 
 

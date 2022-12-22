@@ -7,6 +7,7 @@ decodedContent = encodedContent.decode("utf8")
 print(decodedContent)
 print("We get sms!")
 fp.close()
-
+while(1):
+    pass
 
 
